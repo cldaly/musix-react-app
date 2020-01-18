@@ -1,0 +1,36 @@
+.main {
+    margin-top: 10vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main h2 {
+    font-weight: 400;
+    font-size: 2em;
+    letter-spacing: 0.04em;
+    text-align: center;
+}
+
+.display {
+    margin: 10px auto;
+    padding: 5px 15px;
+    border: 1px solid #00479e;
+    background-color: #c9e4ff;
+    color: #002a5e;
+    border-radius: 10px;
+    width: 450px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.display p {
+    margin: 0.5em 0;
+}
+  
+.display .close {
+    margin-right:-5px;
+    cursor: pointer;
+}

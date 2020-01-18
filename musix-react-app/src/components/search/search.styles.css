@@ -1,0 +1,41 @@
+.results {
+    margin: 20px auto;
+    width: 1200px;
+    text-align: center;
+    flex-wrap: wrap;
+    overflow: hidden;
+}
+
+.track {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px auto;
+    width: 1200px;
+}
+
+.search-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    margin: 15px auto;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 400px;
+    margin: 20px auto;
+}
+.form-container .search-form, .search-input {
+    width: 100%;
+    margin: 0 10px;
+}
+
+.search-form .MuiFormControl-root {
+    width:100%;
+}

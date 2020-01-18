@@ -1,0 +1,23 @@
+.error-alert {
+    padding: 5px 15px;
+    margin: 15px auto -10px;
+    border: 1px solid #9e0000;
+    background-color: #ffd1d1;
+    color: #570000;
+    border-radius: 10px;
+    width: 450px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.error-alert p {
+    margin: 0.5em 0;
+}
+
+
+.error-alert .close {
+    margin-right:-5px;
+    cursor: pointer;
+}

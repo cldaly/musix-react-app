@@ -1,0 +1,40 @@
+
+.album-card {
+    width: 300px;
+    margin: 0 auto;
+    max-height: 90%;
+    padding: 20px;
+    background-color: #fff;
+}
+
+.album-image {
+    margin-top: -16px;
+    cursor: pointer;
+    height: 275px;
+    width: auto;
+}
+
+.album-card .MuiCardHeader-root {
+    cursor: pointer;
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.MuiCardHeader-root .MuiCardHeader-subheader {
+    padding-left: 10px;
+}
+
+.MuiCardHeader-root .MuiCardHeader-title {
+    font-size: 1.5em;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+}
+
+.album-card .MuiButton-root {
+    align-self:center;
+    margin: 0 auto;
+}
+
+.album-card .MuiCardActions-root {
+    margin: 10px auto -10px;
+}

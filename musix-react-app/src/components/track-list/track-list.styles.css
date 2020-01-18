@@ -1,0 +1,48 @@
+.tracklist-card .MuiCardHeader-root {
+    margin-bottom: 0;
+}
+
+.tracklist-card .MuiCardContent-root:last-child {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.tracklist-card button {
+    margin: 0 auto;
+}
+
+.tracklist-card {
+    width: 450px;
+    padding: 30px;
+}
+
+.tracklist-card ol {
+    margin-left: 80px;
+    width: 300px;
+    text-align: left;
+}
+
+.tracklist-card li {
+    padding: 1px 3px;
+    font-size: 0.9em;
+    letter-spacing: 0.02em;
+}
+
+.MuiAvatar-root.tracklist-image {
+    height: 80px;
+    width: 80px;
+}
+
+.close {
+    position: relative;
+    float: right;
+    cursor: pointer;
+    opacity: 0.5;
+    font-size: 0.9em;
+    transition: opacity 0.2s;
+}
+
+.close:hover {
+    opacity: 1;
+    transition: opacity 0.2s;
+}

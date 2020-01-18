@@ -1,0 +1,102 @@
+.profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile h2 {
+    font-weight: 400;
+    font-size: 2em;
+    letter-spacing: 0.04em;
+}
+
+.profile-main {
+    margin: 25px auto 40px;
+    background-color: #fdfdfd;
+    border-radius: 10px;
+    border: 1px solid #777;
+    width: 600px;
+    max-width: 100%;
+    padding: 40px 30px;
+    box-shadow: 10px 10px 40px rgba(0,0,0,0.08), 2px 2px 8px rgba(0,0,0,0.2);
+}
+
+.profile-main h4 {
+    font-size: 1.2em;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    color: #555;
+    border-bottom: 1px solid #ccc;
+    text-align: left;
+}
+
+.profile-main .MuiExpansionPanelSummary-content .title-icon  {
+    margin-right: 40px;
+    color: #405e41
+}
+
+.profile-main .change-password {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.profile-main .MuiExpansionPanelDetails-root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.profile-main .change-password >* {
+    width: 33.33%;
+    font-size: 0.9em;
+}
+
+.profile-main button.update-btn {
+    width: fit-content;
+    margin: 10px 0 10px auto;
+}
+
+.profile-main .update-picture {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+}
+
+
+
+.delete {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-top: 5px;
+    border-top: 1px solid #ccc;
+    padding-top: 20px;
+}
+
+.delete h4 {
+    font-size: 1em;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    margin: 0;
+    padding-bottom: 0;
+    padding-left: 10px;
+    padding-right: 20px;
+    color: rgba(0,0,0,.64);;
+    border-bottom: none;
+    text-align: left;
+}
+
+.delete button {
+    width: 200px;
+    height: 35px;
+    align-self: left;
+}
