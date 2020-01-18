@@ -8,10 +8,12 @@ import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import { Icon } from '@material-ui/core';
+import Axios from 'axios';
 
 import './profile.styles.css';
 import { Alert } from '../alert/alert.component';
-import { Icon } from '@material-ui/core';
+
 
 class Profile extends React.Component {
     constructor(props) {
@@ -32,11 +34,63 @@ class Profile extends React.Component {
     }
 
     validatePassword = () => {
-        const oldPass = document.getElementById('old-password').value;
-        const newPass = document.getElementById('new-password').value;
-        const conPass = document.getElementById('conf-password').value;
+        this.setState({submitted:true}, () => {
+            const oldPass = document.getElementById('old-password').value;
+            const newPass = document.getElementById('new-password').value;
+            const conPass = document.getElementById('conf-password').value;
 
-        
+            let opError = { status: false, message: '' };
+            let npError = { status: false, message: '' };
+            let cpError = { status: false, message: '' };
+
+            if (oldPass === '' || oldPass === undefined || oldPass === null) {
+                opError = { status: true, message: 'Old password is required' }
+            }
+
+            if (newPass === '' || newPass === undefined || newPass === null) {
+                npError = { status: true, message: 'New password is required' }
+            } else if (newPass.length < 6) {
+                npError = { status: true, message: 'Minimin 6 characters' }
+            }
+
+            if (conPass === '' || conPass === undefined || conPass === null) {
+                cpError = { status: true, message: 'Confirmation is required' }
+            } else if (conPass.length < 6) {
+                cpError = { status: true, message: 'Minimin 6 characters' }
+            }
+            
+            if (!npError.status && !cpError.status && newPass === oldPass) {
+                npError = { status: true, message: 'New password same as old' }
+                cpError = { status: true, message: '' }
+            } else if (!npError.status && !cpError.status && newPass !== conPass) {
+                npError = { status: true, message: '' }
+                cpError = { status: true, message: `Confirmation doesn't match` }
+            }
+
+            this.setState({passwordErrorOld:opError, passwordErrorNew: npError, passwordErrorConf:cpError}, () => {
+                if (!this.state.passwordErrorOld.status && !this.state.passwordErrorNew.status && !this.state.passwordErrorConf.status) {
+                    this.updatePassword(oldPass,newPass);
+                }
+            });
+        });
+    }
+
+    updatePassword = (oldPassword, newPassword) => {
+        this.setState({loading:true}, () => {
+            let formdata = new FormData();
+            formdata.append('oldpassword', oldPassword);
+            formdata.append('newpassword', newPassword);
+            let token  = localStorage.getItem('Token');
+            let userid = localStorage.getItem('userid');
+            Axios.put('http://localhost:8080/users/changepassword',formdata,{params: {Authorization: `Bearer ${token}`, user_id: userid}})
+            .then(() => {
+                this.props.completePasswordUpdate();
+            })
+            .catch(err => {
+                console.log(err);
+                this.setState({errorMessage:'Something went wrong, please try again later'});
+            })
+        });
     }
 
     render() {
@@ -70,7 +124,7 @@ class Profile extends React.Component {
                                     {(passwordErrorConf.status && submitted) && <FormHelperText error>{passwordErrorConf.message}</FormHelperText>}
                                 </FormControl>
                             </form>
-                            <Button className='update-btn' variant="contained" color='primary'>
+                            <Button disableFocusRipple={true} onClick={this.validatePassword} className='update-btn' variant="contained" color='primary'>
                                 {loading && <span className="loading"></span>}
                                 Change Password
                             </Button>
@@ -87,7 +141,7 @@ class Profile extends React.Component {
                                 <FormControl>
                                     <Input disableUnderline={true} onChange={this.uploadPicture} className='upload-field' id='picture' type='file' />
                                 </FormControl>
-                                <Button className='update-btn' variant="contained" color='primary'>
+                                <Button disableFocusRipple={true} className='update-btn' variant="contained" color='primary'>
                                     {loading && <span className="loading"></span>}
                                     Update picture
                                 </Button>
@@ -104,13 +158,13 @@ class Profile extends React.Component {
                             <div className="delete">
                                 <h4>Do you want to delete your profile? </h4>
                                 {confirmDelete ? (
-                                    <Button startIcon={<Icon>delete</Icon>} variant="contained" color="secondary">Delete Profile</Button>
+                                    <Button disableFocusRipple={true} startIcon={<Icon>delete</Icon>} variant="contained" color="secondary">Delete Profile</Button>
                                 ) : (
-                                        <Button startIcon={<Icon>delete</Icon>} variant="contained" color="secondary">
-                                            <span>Confirm Delete</span>
-                                            {loading && <span className="loading"></span>}
-                                        </Button>
-                                    )}
+                                    <Button disableFocusRipple={true} startIcon={<Icon>delete</Icon>} variant="contained" color="secondary">
+                                        <span>Confirm Delete</span>
+                                        {loading && <span className="loading"></span>}
+                                    </Button>
+                                )}
                             </div>
                         </ExpansionPanelDetails>
                     </ExpansionPanel>

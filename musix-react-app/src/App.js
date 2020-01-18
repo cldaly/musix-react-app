@@ -5,7 +5,7 @@ import { Header } from './components/header/header.component';
 import Icon from '@material-ui/core/Icon';
 import './App.css';
 import HomePage from './components/homepage/homepage.component';
-import UserPage from './pages/user-page/user-page.component';
+import UserPage from './components/user-page/user-page.component';
 
 
 class App extends Component {
@@ -44,6 +44,13 @@ class App extends Component {
 
     this.setState({profileImage:user.profileImg, isLoggedIn:true}, () => {
       this.generateMessage(message, 5);
+    })
+  }
+
+  completePasswordUpdate = () => {
+    this.setState({isLoggedIn:false}, () => {
+      this.generateMessage('Your password has been updated, please log back in', 10);
+      localStorage.clear();
     })
   }
 
@@ -95,6 +102,7 @@ class App extends Component {
               <UserPage 
                 isLoggedIn={this.state.isLoggedIn}
                 completeLogin={this.completeLogin}
+                completePasswordUpdate={this.completePasswordUpdate}
               />
             </Route>
             <Route exact path='*'>
