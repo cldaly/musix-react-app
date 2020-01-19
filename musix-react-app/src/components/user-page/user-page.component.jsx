@@ -4,7 +4,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import Register from '../register/register.component';
 import Profile from '../profile/profile.component';
 
-const UserPage = ({isLoggedIn, completeLogin, completePasswordUpdate}) => (
+const UserPage = ({isLoggedIn, completeLogin, completePasswordUpdate, completePictureUpdate, completeProfileDelete}) => (
     <div className='user-page'>
         <Switch>
             <Route exact path='/user/login'>
@@ -23,7 +23,11 @@ const UserPage = ({isLoggedIn, completeLogin, completePasswordUpdate}) => (
             </Route>
             <Route exact path='/user/profile'>
                 {isLoggedIn ? (
-                    <Profile completePasswordUpdate={completePasswordUpdate} />
+                    <Profile 
+                        completePasswordUpdate={completePasswordUpdate} 
+                        completePictureUpdate={completePictureUpdate} 
+                        completeProfileDelete={completeProfileDelete} 
+                    />
                 ) : (
                     <Redirect to={{ pathname: "/app" }}/>
                 )}

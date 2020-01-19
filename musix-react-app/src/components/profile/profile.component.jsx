@@ -23,9 +23,12 @@ class Profile extends React.Component {
             passwordErrorOld: { status: false, message: '' },
             passwordErrorNew: { status: false, message: '' },
             passwordErrorConf: { status: false, message: '' },
+            pictureError: { status: false, message: '' },
             submitted: false,
-            loading: false,
-            confirmDelete: true
+            passwordLoading:false, 
+            pictureLoading:false, 
+            deleteLoading:false,
+            confirmDelete: false
         }
     }
 
@@ -76,7 +79,7 @@ class Profile extends React.Component {
     }
 
     updatePassword = (oldPassword, newPassword) => {
-        this.setState({loading:true}, () => {
+        this.setState({passwordLoading:true}, () => {
             let formdata = new FormData();
             formdata.append('oldpassword', oldPassword);
             formdata.append('newpassword', newPassword);
@@ -88,13 +91,69 @@ class Profile extends React.Component {
             })
             .catch(err => {
                 console.log(err);
-                this.setState({errorMessage:'Something went wrong, please try again later'});
+                this.setState({errorMessage:'Something went wrong, please try again later', passwordLoading:false});
             })
         });
     }
 
+    file = new File([''],'none',{type: "image/png"});
+
+    uploadPicture = (event) => {
+        this.file = event.target.files[0];
+    }
+
+    updatePicture = () => {
+        this.setState({submitted: true}, () => {
+            if (this.file.name === 'none') {
+                this.setState({pictureError:{status:true, message:'No picture has been uploaded'}})
+            } else if (this.file.size >= 1048576) {
+                this.setState({pictureError: {status:true, message: 'File size too large (1mb max)'}})
+            } else {
+                this.setState({pictureError: { status: false, message: '' },pictureLoading:true}, () => {
+                    let formdata = new FormData();
+                    formdata.append('file', this.file);
+                    let token  = localStorage.getItem('Token');
+                    let userid = localStorage.getItem('userid');
+                    Axios.put('http://localhost:8080/users/changeprofilepicture',formdata,{params: {Authorization: `Bearer ${token}`, user_id: userid}})
+                    .then(() => {
+                        Axios.get('http://localhost:8080/users/getuserimage', {params: {user_id: userid, Authorization: `Bearer ${token}`}})
+                        .then(data => {
+                            return JSON.parse(data.request.response);
+                        }).then(user => {
+                            this.props.completePictureUpdate(`data:image/png;base64, ${user["profileImage"]}`)
+                            this.setState({pictureLoading:false}, () => {
+                                this.file = new File([''],'none',{type: "image/png"});
+                                document.getElementById('picture').value = null;
+                            })
+                        })
+                    }).catch(err => {
+                        console.log(err);
+                        this.setState({errorMessage:'Something went wrong, please try again later', pictureLoading:false});
+                    })
+                })
+            }
+        })
+    }
+
+    confirmDelete = () => { this.setState({confirmDelete:true}) }
+
+    deleteProfile = () => {
+        this.setState({deleteLoading:true}, () => {
+            let token  = localStorage.getItem('Token');
+            let userid = localStorage.getItem('userid');
+            Axios.delete('http://localhost:8080/users/deleteuser',{params: {user_id: userid, Authorization: `Bearer ${token}`}})
+            .then(() => {
+                this.props.completeProfileDelete();
+            })
+            .catch(err => {
+                console.log(err);
+                this.setState({confirmDelete:false, deleteLoading:false ,errorMessage:'Something went wrong, please try again later'});
+            })
+        })
+    }
+
     render() {
-        const { errorMessage, passwordErrorOld, passwordErrorNew, passwordErrorConf, submitted, loading, confirmDelete } = this.state;
+        const { errorMessage, passwordErrorOld, passwordErrorNew, passwordErrorConf, pictureError, submitted, passwordLoading, pictureLoading, deleteLoading, confirmDelete } = this.state;
         return (
             <div className="profile">
                 <h2>Your Profile</h2>
@@ -125,7 +184,7 @@ class Profile extends React.Component {
                                 </FormControl>
                             </form>
                             <Button disableFocusRipple={true} onClick={this.validatePassword} className='update-btn' variant="contained" color='primary'>
-                                {loading && <span className="loading"></span>}
+                                {passwordLoading && <span className="loading"></span>}
                                 Change Password
                             </Button>
                         </ExpansionPanelDetails>
@@ -139,10 +198,11 @@ class Profile extends React.Component {
                         <ExpansionPanelDetails>
                             <form className="update-picture">
                                 <FormControl>
-                                    <Input disableUnderline={true} onChange={this.uploadPicture} className='upload-field' id='picture' type='file' />
+                                    <Input onChange={this.uploadPicture} disableUnderline={true} className='upload-field' id='picture' type='file' />
+                                    {(pictureError.status && submitted) && <FormHelperText error>{pictureError.message}</FormHelperText>}
                                 </FormControl>
-                                <Button disableFocusRipple={true} className='update-btn' variant="contained" color='primary'>
-                                    {loading && <span className="loading"></span>}
+                                <Button disableFocusRipple={true} className='update-btn' variant="contained" color='primary' onClick={this.updatePicture}>
+                                    {pictureLoading && <span className="loading"></span>}
                                     Update picture
                                 </Button>
                             </form>
@@ -157,12 +217,12 @@ class Profile extends React.Component {
                         <ExpansionPanelDetails>
                             <div className="delete">
                                 <h4>Do you want to delete your profile? </h4>
-                                {confirmDelete ? (
-                                    <Button disableFocusRipple={true} startIcon={<Icon>delete</Icon>} variant="contained" color="secondary">Delete Profile</Button>
+                                {!confirmDelete ? (
+                                    <Button onClick={this.confirmDelete} disableFocusRipple={true} variant="outlined" color="secondary">Delete Profile</Button>
                                 ) : (
-                                    <Button disableFocusRipple={true} startIcon={<Icon>delete</Icon>} variant="contained" color="secondary">
+                                    <Button onClick={this.deleteProfile} disableFocusRipple={true} startIcon={<Icon>delete</Icon>} variant="contained" color="secondary">
                                         <span>Confirm Delete</span>
-                                        {loading && <span className="loading"></span>}
+                                        {deleteLoading && <span className="loading"></span>}
                                     </Button>
                                 )}
                             </div>

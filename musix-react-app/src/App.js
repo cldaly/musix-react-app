@@ -48,14 +48,28 @@ class App extends Component {
   }
 
   completePasswordUpdate = () => {
-    this.setState({isLoggedIn:false}, () => {
+    this.setState({isLoggedIn:false, profileImage:''}, () => {
       this.generateMessage('Your password has been updated, please log back in', 10);
       localStorage.clear();
     })
   }
 
+  completePictureUpdate = (newImage) => {
+    localStorage.setItem('profileImage',newImage);
+    this.setState({profileImage:newImage}, () => {
+      this.generateMessage('Your picture has been updated', 5);
+    })
+  }
+
+  completeProfileDelete = () => {
+    this.setState({isLoggedIn:false, profileImage:''}, () => {
+      this.generateMessage('Your profile has been deleted :(', 10);
+      localStorage.clear();
+    })
+  }
+
   logout = () => {
-    this.setState({isLoggedIn:false}, () => {
+    this.setState({isLoggedIn:false, profileImage:''}, () => {
       this.generateMessage('You have been logged out',5);
       localStorage.clear();
     })
@@ -103,6 +117,8 @@ class App extends Component {
                 isLoggedIn={this.state.isLoggedIn}
                 completeLogin={this.completeLogin}
                 completePasswordUpdate={this.completePasswordUpdate}
+                completePictureUpdate={this.completePictureUpdate}
+                completeProfileDelete={this.completeProfileDelete}
               />
             </Route>
             <Route exact path='*'>
